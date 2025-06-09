@@ -1,4 +1,4 @@
-name: Deploy Laravel Application
+name: Deploy Laravel school Erp
 
 on:
   push:
@@ -6,23 +6,22 @@ on:
       - main
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Sync files to server
+      - name: Checkout repo
+        uses: actions/checkout@v3  
+            
+      - name: sync files to server
         uses: appleboy/scp-action@v0.1.6
         with:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
-          source: "./"
-          target: "/var/www/sms.infiniasync.com"
-          strip_components: 0  # Keep directory structure intact
-          rm: true  # Remove files on server that don't exist in source
+          source: "./*"
+          target: "/var/www/sms.infiniasync.com/html"
+          strip_components: 0
 
       - name: Run Laravel deployment commands
         uses: appleboy/ssh-action@v1.0.0
